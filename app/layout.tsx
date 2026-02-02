@@ -2,8 +2,12 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'One Site - Sovereign Intelligence Nexus',
-  description: 'Advanced AI Chat Interface',
+  title: 'S.I.N. | SOVEREIGN INTELLIGENCE NEXUS — @SM0KEN420',
+  description: 'The Sovereign Intelligence Nexus - Advanced AI Chat Interface',
+  viewport: 'width=device-width, initial-scale=1',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
@@ -14,21 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>One Site - Sovereign Intelligence Nexus</title>
+        <meta charSet="utf-8" />
+        <meta name="theme-color" content="#000000" />
       </head>
-      <body className="terminal-container">
-        <div className="terminal-header">
-          <div className="terminal-title">
-            <span className="text-yellow-400">EPIC TECH AI</span>
-            <span className="text-gray-400">//</span>
-            <span className="text-cyan-400">@SMOKEN420</span>
-          </div>
-          <div className="terminal-status">
-            <span className="text-cyan-400">CODESYNTH_ENGINEERS_ONLINE</span>
-          </div>
-        </div>
+      <body className="bg-black text-white font-mono">
         {children}
       </body>
     </html>
