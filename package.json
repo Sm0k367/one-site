@@ -1,7 +1,7 @@
 {
-  "name": "sin-sovereign-intelligence-nexus",
+  "name": "sin-nexus-sovereign-archipelago",
   "version": "1.0.0",
-  "description": "Unified Sovereign Interface for @Sm0ken420 | 10-Node Synthesis",
+  "description": "Unified 10-node synthesis for @Sm0ken420 | Sovereign Intelligence Nexus",
   "main": "api/chat.js",
   "scripts": {
     "start": "vercel dev",
@@ -17,13 +17,6 @@
     "type": "git",
     "url": "https://github.com/Sm0k367/one-site.git"
   },
-  "keywords": [
-    "EpicTechAI",
-    "Sovereign-Intelligence",
-    "S.I.N.",
-    "G-Funk",
-    "Neural-Lounge"
-  ],
   "author": "@Sm0ken420 x Epic Tech AI",
   "license": "MIT"
 }
