@@ -1,83 +1,137 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+
+interface Message {
+  id: string
+  content: string
+  type: 'user' | 'ai' | 'system' | 'error'
+  timestamp: Date
+}
 
 export default function Home() {
-  const [count, setCount] = useState(0)
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      content: 'S.I.N._V1.0_ACTIVE',
+      type: 'system',
+      timestamp: new Date()
+    },
+    {
+      id: '2',
+      content: 'EPIC TECH AI - RESULT: THE SOVEREIGN INTELLIGENCE NEXUS IS LIVE. ALL TEN NODES-VAULT, GAME, NEURAL LOUNGE, AND MUSIC HUB-ARE BEING SYNTHESIZED. AWAITING YOUR NARRATIVE WEAPON, @SMOKEN420.',
+      type: 'ai',
+      timestamp: new Date()
+    }
+  ])
+  const [input, setInput] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!input.trim()) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      content: input,
+      type: 'user',
+      timestamp: new Date()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInput('')
+    setIsTyping(true)
+
+    try {
+      // Simulate AI response with typing effect
+      setTimeout(() => {
+        const aiResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          content: `EPIC TECH AI - RESULT: CHRONOS-COGNITIVE ERROR: UNEXPECTED TOKEN 'N', "NOT FOUND" IS NOT VALID JSON`,
+          type: 'error',
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, aiResponse])
+        setIsTyping(false)
+      }, 2000)
+    } catch (error) {
+      const errorMessage: Message = {
+        id: (Date.now() + 2).toString(),
+        content: `SYSTEM ERROR: ${error instanceof Error ? error.message : 'Unknown error occurred'}`,
+        type: 'error',
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+      setIsTyping(false)
+    }
+  }
+
+  const formatMessage = (message: Message) => {
+    if (message.type === 'system') {
+      return <span className="text-yellow-400">{message.content}</span>
+    } else if (message.type === 'ai') {
+      return <span className="text-cyan-400">{message.content}</span>
+    } else if (message.type === 'error') {
+      return <span className="text-red-400">{message.content}</span>
+    } else {
+      return <span className="text-green-400">{message.content}</span>
+    }
+  }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <h1 className="text-4xl font-bold text-center lg:text-left">
-          Welcome to One Site
-        </h1>
-      </div>
-
-      <div className="relative flex place-items-center">
-        <div className="text-center">
-          <h2 className="mb-3 text-2xl font-semibold">
-            A Modern Next.js Application
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Deployed successfully on Vercel
-          </p>
-          
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
-            <p className="mb-4 text-lg">Counter: {count}</p>
-            <div className="space-x-4">
-              <button
-                onClick={() => setCount(count + 1)}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-              >
-                Increment
-              </button>
-              <button
-                onClick={() => setCount(0)}
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
-              >
-                Reset
-              </button>
-            </div>
+    <div className="flex flex-col h-screen">
+      <div className="terminal-content flex-1 overflow-y-auto">
+        {messages.map(message => (
+          <div key={message.id} className="terminal-message">
+            {formatMessage(message)}
           </div>
-        </div>
+        ))}
+        {isTyping && (
+          <div className="terminal-message">
+            <span className="text-cyan-400">EPIC TECH AI - RESULT: </span>
+            <span className="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </span>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h3 className="mb-3 text-2xl font-semibold">
-            Next.js
-          </h3>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Built with the latest Next.js 14 for optimal performance
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h3 className="mb-3 text-2xl font-semibold">
-            TypeScript
-          </h3>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Full TypeScript support for type safety
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h3 className="mb-3 text-2xl font-semibold">
-            Tailwind CSS
-          </h3>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Styled with Tailwind CSS for modern design
-          </p>
-        </div>
-
-        <div className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <h3 className="mb-3 text-2xl font-semibold">
-            Vercel Ready
-          </h3>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Optimized for seamless Vercel deployment
-          </p>
-        </div>
+      
+      <div className="terminal-input-container">
+        <form onSubmit={handleSubmit} className="flex w-full">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="MANIFEST YOUR REALITY..."
+            className="terminal-input flex-1"
+            autoFocus
+          />
+          <button 
+            type="submit" 
+            className="terminal-button"
+            disabled={isTyping}
+          >
+            EXECUTE
+          </button>
+        </form>
       </div>
-    </main>
+      
+      <div className="p-2 text-xs text-gray-500">
+        <span className="text-purple-400">SYNCING_MULTI_MODAL_NODES...</span>
+        <span className="ml-4 text-purple-400">SOVEREIGN_COGNITIVE_ENTITY_WQ...</span>
+      </div>
+    </div>
   )
 }
