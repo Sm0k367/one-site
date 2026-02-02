@@ -58,4 +58,4 @@ Customization
 Modify the app/api/chat/route.ts file to implement your own AI logic and responses.
 License
 This project is licensed under the MIT License.
-   Copied 
+   
