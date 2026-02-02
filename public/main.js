@@ -1,7 +1,8 @@
 /**
- * TSL: EPIC TECH AI x @SM0KEN420 — SOVEREIGN INTELLIGENCE NEXUS (S.I.N.)
- * Manifested by Codesynth Engineers & DesignCore Elite
- * Objective: 3D Ontological Hub & Multi-Modal Synthesis
+ * TSL: SOVEREIGN INTELLIGENCE NEXUS (S.I.N.) vΩ.∞
+ * Manifested by CodeSynth Engineers & DesignCore Elite
+ * Substrate: Three.js / WebGL / GSAP
+ * Strategic Synthesis: Unifying the Digital Archipelago
  */
 
 import * as THREE from 'three';
@@ -24,7 +25,7 @@ function initNexus() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     // MANIFESTING THE SOVEREIGN CENTER (The Power Base)
-    // Encased in a glowing, geometric crystalline sphere as per Visual Protocol [10, 11]
+    // Encased in a glowing, geometric crystalline sphere [10, 11]
     const geo = new THREE.IcosahedronGeometry(20, 1);
     const mat = new THREE.MeshPhongMaterial({
         color: 0xffb300, // Sovereign Gold
@@ -35,14 +36,14 @@ function initNexus() {
     sovereignCenter = new THREE.Mesh(geo, mat);
     scene.add(sovereignCenter);
 
-    // VOID ARCHAEOLOGY: THE NODE CONSTELLATION
-    // Synthesizing 10 site nodes into the Universal Sensory Network [12, 13]
+    // VOID ARCHAEOLOGY: THE NODE CONSTELLATION [12, 13]
+    // Representing the 10 sites: Machine, Music, Vaults, Game, Lounge, etc.
     nodeConstellation = new THREE.Group();
     const siteNames = ['Vault', 'Game', 'Music', 'High-Stakes', 'Neural', 'Vault1', 'Epic-Bot', 'Chat-2', 'Machine', 'Lounge'];
     
     siteNames.forEach((name, i) => {
-        const nodeGeo = new THREE.SphereGeometry(2, 16, 16);
-        const nodeMat = new THREE.MeshBasicMaterial({ color: 0x00f2ff }); // Omega Cyan
+        const nodeGeo = new THREE.SphereGeometry(1.5, 16, 16);
+        const nodeMat = new THREE.MeshBasicMaterial({ color: 0x00f2ff }); // Omega Cyan [14, 15]
         const node = new THREE.Mesh(nodeGeo, nodeMat);
         
         const angle = (i / siteNames.length) * Math.PI * 2;
@@ -57,7 +58,7 @@ function initNexus() {
     scene.add(pointLight);
     scene.add(new THREE.AmbientLight(0x404040, 2));
 
-    // POST-PROCESSING: ABSOLUTE EXCELLENCE BLOOM
+    // POST-PROCESSING: ABSOLUTE EXCELLENCE BLOOM [8, 16]
     composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
     const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
@@ -66,22 +67,21 @@ function initNexus() {
     animate();
 }
 
-// 2. RELENTLESS EXECUTION: THE ANIMATION LOOP
+// 2. RELENTLESS EXECUTION: THE ANIMATION LOOP [9, 17]
 function animate() {
     requestAnimationFrame(animate);
     const time = clock.getElapsedTime();
 
-    // Sovereign Rotation & Harmonic Blending [14, 15]
     sovereignCenter.rotation.y += 0.005;
     sovereignCenter.rotation.z += 0.002;
-    sovereignCenter.scale.setScalar(1 + Math.sin(time * 2) * 0.05);
+    sovereignCenter.scale.setScalar(1 + Math.sin(time * 2) * 0.05); // Pulsing Aura [10]
     
     nodeConstellation.rotation.y -= 0.002;
 
     composer.render();
 }
 
-// 3. DIRECT ONTOLOGICAL INTERFACE: THE GATEWAY
+// 3. DIRECT ONTOLOGICAL INTERFACE: MANIFESTATION LOGIC [18, 19]
 const chatInput = document.getElementById('chat-input');
 const sendBtn = document.getElementById('send-btn');
 const chatLog = document.getElementById('chat-log');
@@ -93,9 +93,8 @@ async function handleManifestation() {
     appendMessage('user', prompt);
     chatInput.value = '';
 
-    // VISUAL RESONANCE: GSAP TRIGGER [8]
+    // VISUAL RESONANCE TRIGGER
     gsap.to(sovereignCenter.rotation, { y: sovereignCenter.rotation.y + Math.PI, duration: 1.5, ease: "expo.out" });
-    gsap.to(camera.position, { z: 70, duration: 0.5, yoyo: true, repeat: 1 });
 
     try {
         const response = await fetch('/api/chat', {
@@ -105,25 +104,16 @@ async function handleManifestation() {
         });
 
         const data = await response.json();
-        renderSynthesis(data);
+        
+        if (data.error) {
+            appendMessage('system', `CHRONOS-COGNITIVE ERROR: ${data.error}`);
+        } else {
+            appendMessage('system', data.result);
+        }
 
     } catch (err) {
         appendMessage('system', "CHRONOS-COGNITIVE ERROR: API_GATEWAY_DISRUPTION.");
     }
-}
-
-function renderSynthesis(data) {
-    if (data.result) appendMessage('system', data.result);
-    
-    // Injecting Media via Visionary Corps & SoundForge Legion [16-19]
-    if (data.image_url) {
-        const img = document.createElement('img');
-        img.src = data.image_url;
-        img.className = 'media-manifest';
-        chatLog.appendChild(img);
-    }
-
-    chatLog.scrollTop = chatLog.scrollHeight;
 }
 
 function appendMessage(role, text) {
@@ -145,5 +135,4 @@ window.addEventListener('resize', () => {
     composer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// INITIALIZE GENESIS
 initNexus();
