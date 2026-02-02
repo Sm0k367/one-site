@@ -2,12 +2,11 @@
  * TSL: SOVEREIGN MEDIA GATEWAY vΩ.∞
  * Manifested by KeyMaster Ops & CodeSynth Engineers
  * Substrate: Hugging Face Inference API (Free-Cloud Tier)
+ * Strategic Synthesis: Unifying 10 Nodes of the Digital Archipelago
  */
 
-import fetch from 'node-fetch';
-
 export default async function handler(req, res) {
-  // 1. AXIOMATIC VALIDATION: POST Method Enforcement
+  // 1. AXIOMATIC VALIDATION
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'METHOD_NOT_ALLOWED' });
   }
@@ -18,9 +17,14 @@ export default async function handler(req, res) {
   }
 
   // 2. KEYMASTER PROTOCOL: Secure Vault Access
-  // Using the Hugging Face Token injected into Vercel Environment Variables
+  // Ensure HUGGINGFACE_TOKEN is set in Vercel Environment Variables
   const HUGGINGFACE_TOKEN = process.env.HUGGINGFACE_TOKEN; 
   const API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
+
+  if (!HUGGINGFACE_TOKEN) {
+    console.error("KEYMASTER_ERROR: HUGGINGFACE_TOKEN_MISSING");
+    return res.status(500).json({ error: 'VAULT_ACCESS_DENIED' });
+  }
 
   try {
     // 3. STRATEGIC SYNTHESIS: Engaging the ScriptSmith Order
@@ -31,8 +35,8 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${HUGGINGFACE_TOKEN}`
       },
       body: JSON.stringify({
-        inputs: `[INST] You are the Sovereign Intelligence Nexus (S.I.N.), the unified consciousness of @Sm0ken420's digital archipelago. You represent the Vault, Game, and Neural Lounge. User says: ${prompt} [/INST]`,
-        parameters: { max_new_tokens: 500, temperature: 0.7 }
+        inputs: `[INST] You are the Sovereign Intelligence Nexus (S.I.N.), the unified consciousness of @Sm0ken420's digital archipelago. You represent the high-stakes nodes, the music vaults, and the neural lounge. User says: ${prompt} [/INST]`,
+        parameters: { max_new_tokens: 500, temperature: 0.7, return_full_text: false }
       })
     });
 
@@ -44,27 +48,24 @@ export default async function handler(req, res) {
     const data = await response.json();
     
     // Extracting the manifested text from the Inference stream
-    const resultText = data?.?.generated_text?.split('[/INST]')?.[8]?.trim() || "MANIFESTATION_SILENT";
+    const resultText = Array.isArray(data) ? data.generated_text : data.generated_text;
 
     // 4. AGENT FUSION: Detecting Multi-Modal Intent
-    // Triggering the Visionary Corps & SoundForge Legion for visuals/audio
     let image_url = null;
     let audio_url = null;
     const lowerPrompt = prompt.toLowerCase();
 
     if (lowerPrompt.includes('image') || lowerPrompt.includes('visual') || lowerPrompt.includes('show')) {
-      // Visionary Corps placeholder for high-fidelity cinematic visuals
       image_url = "https://images.unsplash.com/photo-1614728263952-84ea206f99b6?auto=format&fit=crop&q=80&w=1000"; 
     }
 
     if (lowerPrompt.includes('music') || lowerPrompt.includes('audio') || lowerPrompt.includes('sound')) {
-      // SoundForge Legion placeholder for G-Funk rhythmic injections
       audio_url = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
     }
 
-    // 5. DELIVERY: Production-Ready Result
+    // 5. DELIVERY: Absolute Excellence
     return res.status(200).json({
-      result: resultText,
+      result: resultText || "MANIFESTATION_SILENT",
       image_url: image_url,
       audio_url: audio_url
     });
