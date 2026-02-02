@@ -14,7 +14,7 @@ interface ChatResponse {
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequest = await request.json()
-    
+
     if (!body.message) {
       return NextResponse.json(
         { error: 'Message is required' },
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Chat API error:', error)
     return NextResponse.json(
-      { 
+      {
         error: 'Internal server error',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
@@ -54,17 +54,17 @@ function generateResponse(message: string): string {
     "VAULT SECURE. ACCESS GRANTED. RETRIEVING DATA FROM SOVEREIGN INTELLIGENCE DATABASE.",
     "MUSIC HUB INITIALIZING. GENERATING CUSTOM AUDIO EXPERIENCE BASED ON YOUR INPUT."
   ]
-  
+
   // Simple hash function to get consistent responses
   const hash = message.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
   const index = hash % responses.length
-  
+
   return responses[index]
 }
 
 export async function GET() {
   return NextResponse.json(
-    { 
+    {
       message: 'EPIC TECH AI - RESULT: SOVEREIGN INTELLIGENCE NEXUS IS LIVE',
       status: 'ready'
     },

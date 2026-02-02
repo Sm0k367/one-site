@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  // Ensure proper static export for Vercel
+  // Proper output for Vercel
   output: 'standalone',
   // Handle images properly
   images: {
@@ -11,11 +11,8 @@ const nextConfig = {
   // Ensure proper base path handling
   basePath: '',
   assetPrefix: undefined,
-  // Enable API routes
-  experimental: {
-    appDir: true,
-  },
-  // Custom webpack configuration if needed
+  // Remove deprecated experimental.appDir - it's default in Next.js 14
+  // webpack configuration
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {

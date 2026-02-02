@@ -25,6 +25,7 @@ export default function Home() {
   ])
   const [input, setInput] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -37,7 +38,7 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!input.trim()) return
 
     const userMessage: Message = {
@@ -50,19 +51,36 @@ export default function Home() {
     setMessages(prev => [...prev, userMessage])
     setInput('')
     setIsTyping(true)
+    setError(null)
 
     try {
-      // Simulate AI response with typing effect
-      setTimeout(() => {
-        const aiResponse: Message = {
-          id: (Date.now() + 1).toString(),
-          content: `EPIC TECH AI - RESULT: CHRONOS-COGNITIVE ERROR: UNEXPECTED TOKEN 'N', "NOT FOUND" IS NOT VALID JSON`,
-          type: 'error',
-          timestamp: new Date()
-        }
-        setMessages(prev => [...prev, aiResponse])
-        setIsTyping(false)
-      }, 2000)
+      // Call the API endpoint
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: input,
+          context: 'user_query'
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status} ${response.statusText}`)
+      }
+
+      const data = await response.json()
+
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: data.response || 'No response received',
+        type: data.type || 'ai',
+        timestamp: new Date()
+      }
+
+      setMessages(prev => [...prev, aiResponse])
+      setIsTyping(false)
     } catch (error) {
       const errorMessage: Message = {
         id: (Date.now() + 2).toString(),
@@ -71,7 +89,9 @@ export default function Home() {
         timestamp: new Date()
       }
       setMessages(prev => [...prev, errorMessage])
+      setError(error instanceof Error ? error.message : 'Unknown error')
       setIsTyping(false)
+      console.error('Chat error:', error)
     }
   }
 
@@ -105,9 +125,14 @@ export default function Home() {
             </span>
           </div>
         )}
+        {error && (
+          <div className="terminal-message">
+            <span className="text-red-400">ERROR: {error}</span>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
-      
+
       <div className="terminal-input-container">
         <form onSubmit={handleSubmit} className="flex w-full">
           <input
@@ -117,9 +142,10 @@ export default function Home() {
             placeholder="MANIFEST YOUR REALITY..."
             className="terminal-input flex-1"
             autoFocus
+            disabled={isTyping}
           />
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             className="terminal-button"
             disabled={isTyping}
           >
@@ -127,7 +153,7 @@ export default function Home() {
           </button>
         </form>
       </div>
-      
+
       <div className="p-2 text-xs text-gray-500">
         <span className="text-purple-400">SYNCING_MULTI_MODAL_NODES...</span>
         <span className="ml-4 text-purple-400">SOVEREIGN_COGNITIVE_ENTITY_WQ...</span>

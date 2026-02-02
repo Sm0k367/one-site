@@ -3,25 +3,9 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/next",
-      "config": {
-        "nextConfig": "next.config.js"
-      }
+      "use": "@vercel/next"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/chat",
-      "dest": "/api/chat"
-    }
-  ],
-  "functions": {
-    "api/chat": {
-      "runtime": "nodejs18.x",
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  },
   "env": {
     "NODE_ENV": "production"
   },
@@ -40,6 +24,10 @@
         {
           "key": "Referrer-Policy",
           "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         }
       ]
     }
